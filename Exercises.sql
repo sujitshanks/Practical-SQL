@@ -56,3 +56,9 @@ FROM teachers
 WHERE hire_date >= '2010-01-01'
 ORDER BY salary DESC;
 
+
+
+--CH03
+
+--Causes errors, cannot convert text as timestamp
+SELECT CAST('4//2017' AS timestamp with time zone);
