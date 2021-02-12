@@ -137,3 +137,23 @@ benefits money
 COPY supervisor_salaries (town, supervisor, salary)
 FROM 'E:\Projects\Practical-SQL\supervisor_salaries.csv'
 WITH (FORMAT CSV, HEADER);
+
+
+
+---COPY to variants
+COPY us_counties_2010
+TO 'E:\Projects\Practical-SQL\us_counties_export.txt'
+WITH (FORMAT CSV, HEADER, DELIMITER '|');
+
+
+COPY us_counties_2010 (geo_name, internal_point_lat, internal_point_lon)
+TO 'E:\Projects\Practical-SQL\us_counties_latlon_export.txt'
+WITH (FORMAT CSV, HEADER, DELIMITER '|');
+
+COPY (
+SELECT geo_name, state_us_abbreviation
+FROM us_counties_2010
+WHERE geo_name ILIKE '%mill%'
+)
+TO 'E:\Projects\Practical-SQL\us_counties_mill_export.txt'
+WITH (FORMAT CSV, HEADER, DELIMITER '|');
