@@ -123,3 +123,28 @@ FROM us_counties_2010 c2010 INNER JOIN us_counties_2000 c2000
 ON c2010.state_fips = c2000.state_fips
    AND c2010.county_fips = c2000.county_fips
 ORDER BY pct_change ASC;
+
+--CH07
+
+--1
+CREATE TABLE albums (
+    album_id bigserial,
+    album_catalog_code varchar(100) NOT NULL,
+    album_title text NOT NULL,
+    album_artist text NOT NULL,
+    album_release_date date,
+    album_genre varchar(40),
+    album_description text,
+    CONSTRAINT album_id_key PRIMARY KEY (album_id),
+    CONSTRAINT release_date_check CHECK (album_release_date > '1/1/1925')
+);
+
+CREATE TABLE songs (
+    song_id bigserial,
+    song_title text NOT NULL,
+    song_artist text NOT NULL,
+    album_id bigint REFERENCES albums (album_id),
+    CONSTRAINT song_id_key PRIMARY KEY (song_id)
+);
+
+--2
