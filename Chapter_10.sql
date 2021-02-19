@@ -1,11 +1,6 @@
---------------------------------------------------------------
--- Practical SQL: A Beginner's Guide to Storytelling with Data
--- by Anthony DeBarros
 
--- Chapter 10 Code Examples
---------------------------------------------------------------
 
--- Listing 10-1: Create Census 2011-2015 ACS 5-Year stats table and import data
+-- 1 Create Census 2011-2015 ACS 5-Year stats table and import data
 
 CREATE TABLE acs_2011_2015_stats (
     geoid varchar(14) CONSTRAINT geoid_key PRIMARY KEY,
@@ -24,14 +19,13 @@ WITH (FORMAT CSV, HEADER, DELIMITER ',');
 
 SELECT * FROM acs_2011_2015_stats;
 
--- Listing 10-2: Using corr(Y, X) to measure the relationship between 
--- education and income
+-- 2
 
 SELECT corr(median_hh_income, pct_bachelors_higher)
     AS bachelors_income_r
 FROM acs_2011_2015_stats;
 
--- Listing 10-3: Using corr(Y, X) on additional variables
+-- 3
 
 SELECT
     round(
@@ -45,7 +39,7 @@ SELECT
       ) AS bachelors_travel_r
 FROM acs_2011_2015_stats;
 
--- Listing 10-4: Regression slope and intercept functions
+-- 4: Regression slope and intercept functions
 
 SELECT
     round(
@@ -56,7 +50,7 @@ SELECT
         ) AS y_intercept
 FROM acs_2011_2015_stats;
 
--- Listing 10-5: Calculating the coefficient of determination, or r-squared
+-- 5
 
 SELECT round(
         regr_r2(median_hh_income, pct_bachelors_higher)::numeric, 3
@@ -76,7 +70,7 @@ FROM acs_2011_2015_stats;
 SELECT covar_pop(median_hh_income, pct_bachelors_higher)
 FROM acs_2011_2015_stats;
 
--- Listing 10-6: The rank() and dense_rank() window functions
+-- 6
 
 CREATE TABLE widget_companies (
     id bigserial,
@@ -102,7 +96,7 @@ SELECT
     dense_rank() OVER (ORDER BY widget_output DESC)
 FROM widget_companies;
 
--- Listing 10-7: Applying rank() within groups using PARTITION BY
+-- 7: Applying rank() within groups using PARTITION BY
 
 CREATE TABLE store_sales (
     store varchar(30),
@@ -130,7 +124,7 @@ SELECT
     rank() OVER (PARTITION BY category ORDER BY unit_sales DESC)
 FROM store_sales;
 
--- Listing 10-8: Create and fill a 2015 FBI crime data table
+-- 8
 
 CREATE TABLE fbi_crime_data_2015 (
     st varchar(20),
@@ -151,9 +145,7 @@ WITH (FORMAT CSV, HEADER, DELIMITER ',');
 SELECT * FROM fbi_crime_data_2015
 ORDER BY population DESC;
 
--- Listing 10-9: Find property crime rates per thousand in cities with 500,000
--- or more people
-
+-- 9
 SELECT
     city,
     st,
