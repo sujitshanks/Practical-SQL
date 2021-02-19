@@ -1,11 +1,6 @@
---------------------------------------------------------------
--- Practical SQL: A Beginner's Guide to Storytelling with Data
--- by Anthony DeBarros
 
--- Chapter 11 Code Examples
---------------------------------------------------------------
 
--- Listing 11-1: Extracting components of a timestamp value using date_part()
+-- 1: Extracting components of a timestamp value using date_part()
 
 SELECT
     date_part('year', '2019-12-01 18:37:12 EST'::timestamptz) AS "year",
@@ -23,7 +18,7 @@ SELECT
 
 SELECT extract('year' from '2019-12-01 18:37:12 EST'::timestamptz) AS "year";
 
--- Listing 11-2: Three functions for making datetimes from components
+-- 2
 
 -- make a date
 SELECT make_date(2018, 2, 22);
@@ -42,7 +37,7 @@ SELECT
     localtimestamp,
     now();
 
--- Listing 11-3: Comparing current_timestamp and clock_timestamp() during row insert
+-- 3
 
 CREATE TABLE current_time_example (
     time_id bigserial,
@@ -59,11 +54,11 @@ SELECT * FROM current_time_example;
 
 -- Time Zones
 
--- Listing 11-4: Showing your PostgreSQL server's default time zone
+-- 4
 
 SHOW timezone; -- Note: You can see all run-time defaults with SHOW ALL;
 
--- Listing 11-5: Showing time zone abbreviations and names
+-- 5
 
 SELECT * FROM pg_timezone_abbrevs;
 SELECT * FROM pg_timezone_names;
@@ -72,7 +67,7 @@ SELECT * FROM pg_timezone_names;
 SELECT * FROM pg_timezone_names
 WHERE name LIKE 'Europe%';
 
--- Listing 11-6: Setting the time zone for a client session
+-- 6: Setting the time zone for a client session
 
 SET timezone TO 'US/Pacific';
 
@@ -101,7 +96,7 @@ SELECT '9/30/1929'::date + '5 years'::interval;
 
 -- Taxi Rides
 
--- Listing 11-7: Creating a table and importing NYC yellow taxi data
+-- 7
 
 CREATE TABLE nyc_yellow_taxi_trips_2016_06_01 (
     trip_id bigserial PRIMARY KEY,
@@ -147,7 +142,7 @@ COPY nyc_yellow_taxi_trips_2016_06_01 (
     improvement_surcharge,
     total_amount
    )
-FROM 'C:\YourDirectory\yellow_tripdata_2016_06_01.csv'
+FROM 'E:\Projects\Practical-SQL\yellow_tripdata_2016_06_01.csv'
 WITH (FORMAT CSV, HEADER, DELIMITER ',');
 
 CREATE INDEX tpep_pickup_idx
@@ -155,7 +150,7 @@ ON nyc_yellow_taxi_trips_2016_06_01 (tpep_pickup_datetime);
 
 SELECT count(*) FROM nyc_yellow_taxi_trips_2016_06_01;
 
--- Listing 11-8: Counting taxi trips by hour
+-- 8
 
 SELECT
     date_part('hour', tpep_pickup_datetime) AS trip_hour,
@@ -164,7 +159,7 @@ FROM nyc_yellow_taxi_trips_2016_06_01
 GROUP BY trip_hour
 ORDER BY trip_hour;
 
--- Listing 11-9: Exporting taxi pickups per hour to a CSV file
+-- 9: Exporting taxi pickups per hour to a CSV file
 
 COPY
     (SELECT
@@ -174,10 +169,10 @@ COPY
     GROUP BY trip_hour
     ORDER BY trip_hour
     )
-TO 'C:\YourDirectory\hourly_pickups_2016_06_01.csv'
+TO 'E:\Projects\Practical-SQL\yellow_tripdata_2016_06_01.csv'
 WITH (FORMAT CSV, HEADER, DELIMITER ',');
 
--- Listing 11-10: Calculating median trip time by hour
+-- 10
 
 SELECT
     date_part('hour', tpep_pickup_datetime) AS trip_hour,
@@ -188,7 +183,7 @@ FROM nyc_yellow_taxi_trips_2016_06_01
 GROUP BY trip_hour
 ORDER BY trip_hour;
 
--- Listing 11-11: Creating a table to hold train trip data
+-- 11: Creating a table to hold train trip data
 
 SET timezone TO 'US/Central';
 
@@ -210,21 +205,21 @@ VALUES
 
 SELECT * FROM train_rides;
 
--- Listing 11-12: Calculating the length of each trip segment
+-- 12: Calculating the length of each trip segment
 
 SELECT segment,
        to_char(departure, 'YYYY-MM-DD HH12:MI a.m. TZ') AS departure,
        arrival - departure AS segment_time
 FROM train_rides;
 
--- Listing 11-13: Calculating cumulative intervals using OVER
+-- 13
 
 SELECT segment,
        arrival - departure AS segment_time,
        sum(arrival - departure) OVER (ORDER BY trip_id) AS cume_time
 FROM train_rides;
 
--- Listing 11-14: Better formatting for cumulative trip time
+-- 14
 
 SELECT segment,
        arrival - departure AS segment_time,

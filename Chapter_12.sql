@@ -1,11 +1,6 @@
---------------------------------------------------------------
--- Practical SQL: A Beginner's Guide to Storytelling with Data
--- by Anthony DeBarros
 
--- Chapter 12 Code Examples
---------------------------------------------------------------
 
--- Listing 12-1: Using a subquery in a WHERE clause
+-- 1: Using a subquery in a WHERE clause
 
 SELECT geo_name,
        state_us_abbreviation,
@@ -17,7 +12,7 @@ WHERE p0010001 >= (
     )
 ORDER BY p0010001 DESC;
 
--- Listing 12-2: Using a subquery in a WHERE clause for DELETE
+-- 2: Using a subquery in a WHERE clause for DELETE
 
 CREATE TABLE us_counties_2010_top10 AS
 SELECT * FROM us_counties_2010;
@@ -30,7 +25,7 @@ WHERE p0010001 < (
 
 SELECT count(*) FROM us_counties_2010_top10;
 
--- Listing 12-3: Subquery as a derived table in a FROM clause
+-- 3
 
 SELECT round(calcs.average, 0) as average,
        calcs.median,
@@ -43,7 +38,7 @@ FROM (
      )
 AS calcs;
 
--- Listing 12-4: Joining two derived tables
+-- 4
 
 SELECT census.state_us_abbreviation AS st,
        census.st_population,
@@ -69,7 +64,7 @@ JOIN
 ON plants.st = census.state_us_abbreviation
 ORDER BY plants_per_million DESC;
 
--- Listing 12-5: Adding a subquery to a column list
+-- 5
 
 SELECT geo_name,
        state_us_abbreviation AS st,
@@ -78,7 +73,7 @@ SELECT geo_name,
         FROM us_counties_2010) AS us_median
 FROM us_counties_2010;
 
--- Listing 12-6: Using a subquery expression in a calculation
+-- 6
 
 SELECT geo_name,
        state_us_abbreviation AS st,
@@ -136,7 +131,7 @@ WHERE EXISTS (
 
                    
                    
--- Listing 12-7: Using a simple CTE to find large counties
+-- 7
 
 WITH
     large_counties (geo_name, st, p0010001)
@@ -158,7 +153,7 @@ WHERE p0010001 >= 100000
 GROUP BY state_us_abbreviation
 ORDER BY count(*) DESC;
 
--- Listing 12-8: Using CTEs in a table join
+-- 8: Using CTEs in a table join
 
 WITH
     counties (st, population) AS
@@ -179,7 +174,7 @@ FROM counties JOIN plants
 ON counties.st = plants.st
 ORDER BY per_million DESC;
 
--- Listing 12-9: Using CTEs to minimize redundant code
+-- 9: Using CTEs to minimize redundant code
 
 WITH us_median AS 
     (SELECT percentile_cont(.5) 
@@ -201,7 +196,7 @@ WHERE (p0010001 - us_median_pop)
 
 CREATE EXTENSION tablefunc;
 
--- Listing 12-10: Creating and filling the ice_cream_survey table
+-- 10: Creating and filling the ice_cream_survey table
 
 CREATE TABLE ice_cream_survey (
     response_id integer PRIMARY KEY,
@@ -210,10 +205,10 @@ CREATE TABLE ice_cream_survey (
 );
 
 COPY ice_cream_survey
-FROM 'C:\YourDirectory\ice_cream_survey.csv'
+FROM 'E:\Projects\Practical-SQL\ice_cream_survey.csv'
 WITH (FORMAT CSV, HEADER);
 
--- Listing 12-11: Generating the ice cream survey crosstab
+-- 11: Generating the ice cream survey crosstab
 
 SELECT *
 FROM crosstab('SELECT office,
@@ -233,7 +228,7 @@ AS (office varchar(20),
     strawberry bigint,
     vanilla bigint);
 
--- Listing 12-12: Creating and filling a temperature_readings table
+-- 12: Creating and filling a temperature_readings table
 
 CREATE TABLE temperature_readings (
     reading_id bigserial PRIMARY KEY,
@@ -245,10 +240,10 @@ CREATE TABLE temperature_readings (
 
 COPY temperature_readings 
      (station_name, observation_date, max_temp, min_temp)
-FROM 'C:\YourDirectory\temperature_readings.csv'
+FROM 'E:\Projects\Practical-SQL\temperature_readings.csv'
 WITH (FORMAT CSV, HEADER);
 
--- Listing 12-13: Generating the temperature readings crosstab
+-- 13: Generating the temperature readings crosstab
 
 SELECT *
 FROM crosstab('SELECT
@@ -279,7 +274,7 @@ AS (station varchar(50),
     dec numeric(3,0)
 );
 
--- Listing 12-14: Re-classifying temperature data with CASE
+-- 14: Re-classifying temperature data with CASE
 
 SELECT max_temp,
        CASE WHEN max_temp >= 90 THEN 'Hot'
@@ -291,7 +286,7 @@ SELECT max_temp,
         END AS temperature_group
 FROM temperature_readings;
 
--- Listing 12-15: Using CASE in a Common Table Expression
+-- 15: Using CASE in a Common Table Expression
 
 WITH temps_collapsed (station_name, max_temperature_group) AS
     (SELECT station_name,
